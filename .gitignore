@@ -1,23 +1,9 @@
-# Terraform
+# Terraform — état et fichiers générés : NE JAMAIS committer
+**/.terraform/*
 *.tfstate
 *.tfstate.*
-.terraform/
-.terraform.lock.hcl
 crash.log
-
-# Azure
-.azure/
-
-# Kubernetes
-*.kubeconfig
-
-# OS / WSL
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-
-# Logs
-*.log
+# Valeurs personnelles (resource group, etc.) — local uniquement
+*.tfvars
+!*.tfvars.example
+# (On VERSIONNE en revanche le verrou des providers : .terraform.lock.hcl)
