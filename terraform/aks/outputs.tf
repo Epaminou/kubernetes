@@ -7,7 +7,5 @@ output "cluster_name" {
 }
 
 output "get_credentials_command" {
-    value = "az aks get-credentials --resource-group
-    ${data.azurerm_resource_group.this.name} --name
-    ${azurerm_kubernetes_cluster.this.name}"
+    value = "az aks get-credentials --resource-group ${data.azurerm_resource_group.this.name} --name ${azurerm_kubernetes_cluster.this.name}"
 }
