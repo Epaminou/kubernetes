@@ -1,0 +1,15 @@
+# k8s/webapp/service.yaml — À COMPLÉTER
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp
+  namespace: webapp
+  labels:
+    app: webapp
+spec:
+  type: ClusterIP
+  selector:
+    app: webapp # TODO 6 — = label du pod (TODO 3)
+  ports:
+    - port: 80
+      targetPort: 80 # TODO 7 — = containerPort (TODO 5)

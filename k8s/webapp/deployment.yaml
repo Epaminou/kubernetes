@@ -1,0 +1,35 @@
+# k8s/webapp/deployment.yaml — À COMPLÉTER (remplacez chaque __À_COMPLÉTER__)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+  namespace: webapp
+  labels:
+    app: webapp
+spec:
+  replicas: 2 # TODO 1 — nombre de copies du pod (2)
+  selector:
+    matchLabels:
+      app: webapp # TODO 2 — label qui identifie les pods gérés
+  template:
+    metadata:
+      labels:
+        app: webapp # TODO 3 — MÊME label que TODO 2
+    spec:
+      containers:
+        - name: webapp
+          image: nginx:1.27-alpine # TODO 4 — nginx épinglé, JAMAIS latest (ex.nginx:1.27-alpine)
+          ports:
+            - containerPort: 80 # TODO 5 — port d'écoute de nginx (80)
+          readinessProbe: # fournie : conditionne l'ajout aux endpoints du Service
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe: # fournie : redémarre le conteneur s'il ne répond plus
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
