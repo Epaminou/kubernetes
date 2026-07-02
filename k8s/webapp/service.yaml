@@ -1,4 +1,3 @@
-# k8s/webapp/service.yaml — À COMPLÉTER
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,7 +8,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: webapp # TODO 6 — = label du pod (TODO 3)
+    app: webapp
   ports:
     - port: 80
-      targetPort: 80 # TODO 7 — = containerPort (TODO 5)
+      targetPort: 8080 # le conteneur non-root écoute sur 8080
