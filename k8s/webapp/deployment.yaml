@@ -6,6 +6,8 @@ metadata:
   namespace: webapp
   labels:
     app: webapp
+  annotations:
+    kubernetes.io/change-cause: "Déploiement de nginx:1.27.2-alpine"
 spec:
   replicas: 2 # TODO 1 — nombre de copies du pod (2)
   selector:
@@ -18,9 +20,19 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: nginx:1.27-alpine # TODO 4 — nginx épinglé, JAMAIS latest (ex.nginx:1.27-alpine)
+          image: nginx:1.27.2-alpine # TODO 4 — nginx épinglé, JAMAIS latest (ex.nginx:1.27-alpine)
           ports:
             - containerPort: 80 # TODO 5 — port d'écoute de nginx (80)
+          resources:
+            requests:
+              cpu: 50m # TODO 1 — base de calcul du HPA (ex. 50m)
+              memory: 64Mi
+            limits:
+              cpu: 200m # TODO 2 — plafond CPU (ex. 200m)
+              memory: 128Mi
+          envFrom:
+            - secretRef:
+                name: webapp-secret # TODO 4 — nom du Secret (webapp-secret)
           readinessProbe: # fournie : conditionne l'ajout aux endpoints du Service
             httpGet:
               path: /
@@ -33,3 +45,10 @@ spec:
               port: 80
             initialDelaySeconds: 10
             periodSeconds: 10
+          volumeMounts:
+            - name: content
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: content
+          configMap:
+            name: webapp-content # TODO 3 — nom de la ConfigMap (webapp-content)

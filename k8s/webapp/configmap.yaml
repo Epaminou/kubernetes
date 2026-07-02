@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-content
+  namespace: webapp
+  labels:
+    app: webapp
+data:
+  index.html: |
+    <html>
+      <body>
+        <h1>Application fil rouge - Formation AKS</h1>
+        <p>Version configurée via ConfigMap</p>
+      </body>
+    </html>
