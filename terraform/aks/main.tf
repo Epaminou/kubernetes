@@ -44,3 +44,22 @@ resource "azurerm_kubernetes_cluster" "this" {
         ignore_changes = [tags]
     }
 }
+
+# --- Ajout module 8 : registre d'images privé (ACR) ---
+resource "azurerm_container_registry" "this" {
+    name = var.acr_name
+    resource_group_name = data.azurerm_resource_group.this.name
+    location = data.azurerm_resource_group.this.location
+    sku = "Basic"
+    # CHOIX PÉDAGOGIQUE : identifiants admin pour simplifier le push CI (pas d'OIDC/SP).
+    # À NE PAS FAIRE en production (préférer OIDC / identité managée).
+    admin_enabled = true
+    tags = merge(data.azurerm_resource_group.this.tags, var.tags)
+}
+
+# Le cluster (déjà déclaré au TP1) peut TIRER les images de cet ACR.
+resource "azurerm_role_assignment" "aks_acr_pull" {
+    scope = azurerm_container_registry.this.id
+    role_definition_name = "AcrPull"
+    principal_id = azurerm_kubernetes_cluster.this.kubelet_identity[0].object_id
+}

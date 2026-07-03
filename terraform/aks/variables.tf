@@ -25,3 +25,12 @@ variable "tags" {
         module = "1-fondamentaux"
     }
 }
+
+variable "acr_name" {
+    type = string
+    description = "Nom ACR UNIQUE AU MONDE (5-50 car., minuscules/chiffres)."
+    validation {
+        condition = can(regex("^[a-z0-9]{5,50}$", var.acr_name))
+        error_message = "Nom ACR : 5 à 50 caractères, minuscules et chiffres uniquement."
+    }
+}

@@ -1,0 +1,24 @@
+name: build-and-push
+on:
+  push:
+    branches: [ main ]
+
+env:
+  IMAGE_NAME: webapp
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Authentification au registre avec les identifiants admin de l'ACR (choix TP).
+      - name: Login to ACR (admin credentials)
+        run: echo "${{ secrets.ACR_PASSWORD }}" | docker login "${{secrets.ACR_LOGIN_SERVER }}" -u "${{ secrets.ACR_USERNAME }}" --password-stdin
+
+      - name: Build & push image (tag = SHA)
+        run: |
+          IMAGE="${{ secrets.ACR_LOGIN_SERVER }}/${IMAGE_NAME}:${GITHUB_SHA}"
+          docker build -t "$IMAGE" app
+          docker push "$IMAGE"
